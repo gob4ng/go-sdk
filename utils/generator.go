@@ -1,9 +1,7 @@
 package utils
 
 import (
-	"crypto/rand"
-	"errors"
-	"io"
+	"math/rand"
 	"strconv"
 	"time"
 )
@@ -17,26 +15,31 @@ func GenerateUnixTimestamp() string {
 	return timestamp
 }
 
-func GenerateNumber(numberRange int) (*string, *error) {
+func GenerateNumeric(rangeNumber int) string {
+	letterBytes := "0123456789"
+	return generate(letterBytes, rangeNumber)
+}
 
-	table := [...]byte{'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'}
-	b := make([]byte, numberRange)
+func GenerateAlphabet(rangeNumber int) string {
+	letterBytes := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	return generate(letterBytes, rangeNumber)
+}
 
-	n, err := io.ReadAtLeast(rand.Reader, b, numberRange)
-	if err != nil {
-		return nil, &err
+func GenerateAlphaNumeric(rangeNumber int) string {
+	letterBytes := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	return generate(letterBytes, rangeNumber)
+}
+
+func GenerateUniqueCharacter(rangeNumber int) string {
+	letterBytes := "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`~!@#$%^&*()-_=+|]}[{';:/?.>,<"
+	return generate(letterBytes, rangeNumber)
+}
+
+func generate(letterBytes string, rangeNumber int) string {
+	rand.Seed(time.Now().UnixNano())
+	b := make([]byte, rangeNumber)
+	for i := range b {
+		b[i] = letterBytes[rand.Intn(len(letterBytes))]
 	}
-
-	if n != numberRange {
-		newError := errors.New("invalid range")
-		return nil, &newError
-	}
-
-	for i := 0; i < len(b); i++ {
-		b[i] = table[int(b[i])%len(table)]
-	}
-
-	result := string(b)
-
-	return &result, nil
+	return string(b)
 }
