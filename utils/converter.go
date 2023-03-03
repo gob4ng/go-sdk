@@ -25,6 +25,26 @@ func JsonToString(jsonStruct interface{}) string {
 	return string(byteJson)
 }
 
+func JsonStringToStruct(strJson string) (*interface{}, *error) {
+
+	var structJson interface{}
+	if err := json.Unmarshal([]byte(strJson), structJson); err != nil {
+		return nil, &err
+	}
+
+	return &structJson, nil
+}
+
+func XmlStringToStruct(strXml string) (*interface{}, *error) {
+
+	var structJson interface{}
+	if err := xml.Unmarshal([]byte(strXml), structJson); err != nil {
+		return nil, &err
+	}
+
+	return &structJson, nil
+}
+
 func XmlToString(jsonStruct interface{}) string {
 	byteXml, err := xml.Marshal(jsonStruct)
 	if err != nil {

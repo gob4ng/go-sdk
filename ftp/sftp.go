@@ -65,11 +65,10 @@ func NewSftpConfig(data SftpData) (*sshClientConfig, *error) {
 
 func (s *sshClientConfig) Connect() *error {
 
-	client, err := checkConnection(s)
+	_, err := checkConnection(s)
 	if err != nil {
 		return err
 	}
-	defer client.Close()
 
 	return nil
 }
