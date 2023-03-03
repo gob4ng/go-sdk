@@ -2,3 +2,5 @@
 test
 log.txt
 main.go
+go.mod
+go.sum
