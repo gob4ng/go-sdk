@@ -12,6 +12,7 @@ type RedisSetup struct {
 	PrefixKey string
 	Host      string
 	Port      string
+	Username  string
 	Password  string
 	DB        int
 }
@@ -28,6 +29,7 @@ func NewRedisConfig(setup RedisSetup) (*redisConfig, *error) {
 		Addr:     setup.Host + ":" + setup.Port,
 		Password: setup.Password,
 		DB:       setup.DB,
+		Username: setup.Username,
 	})
 
 	ctx := context.Background()
@@ -45,10 +47,11 @@ func NewRedisConfig(setup RedisSetup) (*redisConfig, *error) {
 
 }
 
-func (r redisConfig) SetString(key string, value string, expiration time.Duration) *error {
+func (r redisConfig) SetString(key string, value string, expiration int) *error {
 
 	redisKey := r.redisSetup.PrefixKey + "_" + key
-	if statusCmd := r.client.Set(r.context, redisKey, value, expiration); statusCmd != nil {
+	if statusCmd := r.client.Set(r.context, redisKey, value,
+		time.Millisecond*time.Duration(expiration)); statusCmd != nil {
 
 		if statusCmd.Err() != nil {
 			newError := errors.New(statusCmd.Err().Error())
@@ -72,10 +75,11 @@ func (r redisConfig) GetString(key string) (*string, *error) {
 	return &value, nil
 }
 
-func (r redisConfig) SetJson(key string, json interface{}, expiration time.Duration) *error {
+func (r redisConfig) SetJson(key string, json interface{}, expiration int) *error {
 
 	redisKey := r.redisSetup.PrefixKey + "_" + key
-	if statusCmd := r.client.Set(r.context, redisKey, utils.JsonToString(json), expiration); statusCmd != nil {
+	if statusCmd := r.client.Set(r.context, redisKey, utils.JsonToString(json),
+		time.Millisecond*time.Duration(expiration)); statusCmd != nil {
 
 		if statusCmd.Err() != nil {
 			newError := errors.New(statusCmd.Err().Error())
@@ -103,10 +107,11 @@ func (r redisConfig) GetJson(key string) (*interface{}, *error) {
 	return structJson, nil
 }
 
-func (r redisConfig) SetXml(key string, xml interface{}, expiration time.Duration) *error {
+func (r redisConfig) SetXml(key string, xml interface{}, expiration int) *error {
 
 	redisKey := r.redisSetup.PrefixKey + "_" + key
-	if statusCmd := r.client.Set(r.context, redisKey, utils.XmlToString(xml), expiration); statusCmd != nil {
+	if statusCmd := r.client.Set(r.context, redisKey, utils.XmlToString(xml),
+		time.Millisecond*time.Duration(expiration)); statusCmd != nil {
 
 		if statusCmd.Err() != nil {
 			newError := errors.New(statusCmd.Err().Error())

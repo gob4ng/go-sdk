@@ -5,7 +5,6 @@ import (
 	"encoding/xml"
 	"io"
 	"io/ioutil"
-	"time"
 )
 
 func GetRawData(reader io.Reader) string {
@@ -51,8 +50,4 @@ func XmlToString(jsonStruct interface{}) string {
 		return err.Error()
 	}
 	return string(byteXml)
-}
-
-func GetUnixTimestamp() int64 {
-	return time.Now().UnixNano()
 }
