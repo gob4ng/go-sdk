@@ -2,7 +2,7 @@ package log
 
 import (
 	"fmt"
-	"github.com/gob4ng/go-sdk/database"
+	"github.com/gob4ng/go-sdk/sql"
 	"github.com/gob4ng/go-sdk/utils"
 	"go.uber.org/zap"
 	"strconv"
@@ -94,9 +94,9 @@ func (z ZapLogContext) ServerResponseWarning(tracking ZapTrackingContext, httpCo
 		zap.String("server-response", logTracking.ServerResponse))
 }
 
-func setServerLogTracking(context ZapLogContext, tracking ZapTrackingContext, severity string, httpCode *int, responseBody *string) database.LogTracking {
+func setServerLogTracking(context ZapLogContext, tracking ZapTrackingContext, severity string, httpCode *int, responseBody *string) sql.LogTracking {
 
-	logTracking := database.LogTracking{
+	logTracking := sql.LogTracking{
 		LogType:       LOG_TYPE_SERVER_DELIVERY,
 		Severity:      severity,
 		LogID:         tracking.LogID,

@@ -1,7 +1,7 @@
 package log
 
 import (
-	"github.com/gob4ng/go-sdk/database"
+	"github.com/gob4ng/go-sdk/sql"
 	"github.com/gob4ng/go-sdk/utils"
 	"go.uber.org/zap"
 	"strconv"
@@ -49,9 +49,9 @@ func (z ZapLogContext) JsonError(tracking ZapTrackingContext, message string, js
 		zap.String("raw_data", utils.JsonToString(jsonStruct)))
 }
 
-func setJsonLogTracking(context ZapLogContext, tracking ZapTrackingContext, severity string, message string) database.LogTracking {
+func setJsonLogTracking(context ZapLogContext, tracking ZapTrackingContext, severity string, message string) sql.LogTracking {
 
-	return database.LogTracking{
+	return sql.LogTracking{
 		LogType:       LOG_TYPE_DEFAULT,
 		Severity:      severity,
 		LogID:         tracking.LogID,

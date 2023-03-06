@@ -1,7 +1,6 @@
 package log
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/gob4ng/go-sdk/http"
 	"go.uber.org/zap"
@@ -15,6 +14,7 @@ type ZapLogContext struct {
 	Environment string
 	RecordAble  bool
 	ZapLog      zap.Logger
+	TelegramBot *TelegramBot
 }
 
 type ZapTrackingContext struct {
@@ -23,6 +23,14 @@ type ZapTrackingContext struct {
 	ClientContext  http.Context
 	LogID          string
 	UnixTimestamp  int64
+}
+
+type TelegramBot struct {
+	Environment string
+	ServiceName string
+	TelegramUrl string
+	BotApiToken string
+	GroupChatID string
 }
 
 const (
@@ -50,11 +58,11 @@ const (
 	LOG_TYPE_DEFAULT         = "DEFAULT"
 )
 
-func NewSetupLog(serviceName string, mode string, logPath string) ZapLogContext {
+func NewSetupLog(serviceName string, mode string, logPath string) (*ZapLogContext, *error) {
 
 	_, err := os.OpenFile(logPath, os.O_RDONLY|os.O_CREATE, 0666)
 	if err != nil {
-		fmt.Println(err.Error())
+		return nil, &err
 	}
 
 	zapConfig := zap.NewDevelopmentConfig()
@@ -67,8 +75,10 @@ func NewSetupLog(serviceName string, mode string, logPath string) ZapLogContext 
 
 	zapLog, err := zapConfig.Build()
 	if err != nil {
-		fmt.Println(err.Error())
+		return nil, &err
 	}
 
-	return ZapLogContext{ServiceName: serviceName, Environment: mode, ZapLog: *zapLog}
+	zapLogContent := ZapLogContext{ServiceName: serviceName, Environment: mode, ZapLog: *zapLog}
+
+	return &zapLogContent, nil
 }

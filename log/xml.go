@@ -1,7 +1,7 @@
 package log
 
 import (
-	"github.com/gob4ng/go-sdk/database"
+	"github.com/gob4ng/go-sdk/sql"
 	"github.com/gob4ng/go-sdk/utils"
 	"go.uber.org/zap"
 	"strconv"
@@ -51,9 +51,9 @@ func (z ZapLogContext) XmlError(tracking ZapTrackingContext, message string, xml
 		zap.String("raw_data", utils.XmlToString(xmlStruct)))
 }
 
-func setXmlLogTracking(context ZapLogContext, tracking ZapTrackingContext, severity string, message string) database.LogTracking {
+func setXmlLogTracking(context ZapLogContext, tracking ZapTrackingContext, severity string, message string) sql.LogTracking {
 
-	return database.LogTracking{
+	return sql.LogTracking{
 		LogType:       LOG_TYPE_DEFAULT,
 		Severity:      severity,
 		LogID:         tracking.LogID,
