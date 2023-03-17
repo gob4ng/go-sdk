@@ -9,6 +9,8 @@ import (
 	"strings"
 )
 
+var GlobalZapLogContext *ZapLogContext
+
 type ZapLogContext struct {
 	ServiceName string
 	Environment string
@@ -78,7 +80,7 @@ func NewSetupLog(serviceName string, mode string, logPath string) (*ZapLogContex
 		return nil, &err
 	}
 
-	zapLogContent := ZapLogContext{ServiceName: serviceName, Environment: mode, ZapLog: *zapLog}
+	GlobalZapLogContext = &ZapLogContext{ServiceName: serviceName, Environment: mode, ZapLog: *zapLog}
 
-	return &zapLogContent, nil
+	return GlobalZapLogContext, nil
 }

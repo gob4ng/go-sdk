@@ -1,8 +1,9 @@
-package main
+package builder
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/gob4ng/go-sdk/utils"
+	"net/http"
 )
 
 type GenericResponse struct {
@@ -38,7 +39,7 @@ type responseBuilderContext interface {
 	SetResponseStatus(responseStatus bool) ResponseBuilder
 	SetResponseTimestamp(responseTimestamp int64) ResponseBuilder
 	SetResponseData(responseData any) ResponseBuilder
-	Build() any
+	Build()
 }
 
 func NewResponseBuilder(ginContext *gin.Context) responseBuilderContext {
@@ -72,7 +73,7 @@ func (r ResponseBuilder) SetResponseData(responseData any) ResponseBuilder {
 	return r
 }
 
-func (r ResponseBuilder) Build() any {
+func (r ResponseBuilder) Build() {
 
 	responseCode := "0"
 	if r.Response.genericResponse.ResponseCode != "" {
@@ -98,7 +99,8 @@ func (r ResponseBuilder) Build() any {
 			Data:              r.Response.responseData,
 		}
 
-		return response
+		r.Response.ginContext.JSON(http.StatusOK, response)
+		return
 	}
 
 	response := GenericResponse{
@@ -108,6 +110,7 @@ func (r ResponseBuilder) Build() any {
 		ResponseTimestamp: responseTimestamp,
 	}
 
-	return response
+	r.Response.ginContext.JSON(http.StatusOK, response)
+	return
 
 }

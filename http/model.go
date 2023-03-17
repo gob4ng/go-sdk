@@ -5,6 +5,8 @@ import (
 	"net/http"
 )
 
+var GlobalApiContext *ApiContext
+
 type ApiContext struct {
 	ClientApi map[string]Context
 }
