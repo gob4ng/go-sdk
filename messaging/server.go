@@ -5,9 +5,10 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
-var MessageMap *map[string]map[string]string
+var MessageMap map[string]map[string]string
 
 func NewJsonMessageConfig(path string, fileName string) *error {
 
@@ -32,4 +33,14 @@ func NewJsonMessageConfig(path string, fileName string) *error {
 	}
 
 	return nil
+}
+
+func GetMessage(responseCode string, acceptLanguage string) string {
+
+	if MessageMap == nil {
+		return "unknown message"
+	}
+
+	return MessageMap[strings.ToLower(acceptLanguage)][responseCode]
+
 }
