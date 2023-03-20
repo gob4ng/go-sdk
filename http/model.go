@@ -1,7 +1,6 @@
 package http
 
 import (
-	"github.com/gob4ng/go-sdk/log"
 	"net/http"
 )
 
@@ -17,7 +16,6 @@ type Context struct {
 	URL             string
 	Header          map[string]string
 	Debug           bool
-	ZapLog          *log.ZapLogContext
 	OptionalContext *OptionalContext
 }
 

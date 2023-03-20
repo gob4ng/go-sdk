@@ -19,7 +19,7 @@ import (
 
 func (h Context) HitClient() (*Response, *error) {
 
-	if h.ZapLog == nil {
+	if log.GlobalZapLogContext == nil {
 		newErr := errors.New("please define zap log")
 		return nil, &newErr
 	}
@@ -251,9 +251,9 @@ func printHttpMessage(h Context, clientResponse Response) {
 			}
 
 			if clientResponse.HttpCode == http.StatusOK {
-				h.ZapLog.ClientDebug(trackingContext)
+				log.GlobalZapLogContext.ClientDebug(trackingContext)
 			} else {
-				h.ZapLog.ClientError(trackingContext)
+				log.GlobalZapLogContext.ClientError(trackingContext)
 			}
 
 		} else {
