@@ -60,11 +60,11 @@ const (
 	LOG_TYPE_DEFAULT         = "DEFAULT"
 )
 
-func NewSetupLog(serviceName string, mode string, logPath string) (*ZapLogContext, *error) {
+func NewSetupLog(serviceName string, mode string, logPath string) *error {
 
 	_, err := os.OpenFile(logPath, os.O_RDONLY|os.O_CREATE, 0666)
 	if err != nil {
-		return nil, &err
+		return &err
 	}
 
 	zapConfig := zap.NewDevelopmentConfig()
@@ -77,10 +77,10 @@ func NewSetupLog(serviceName string, mode string, logPath string) (*ZapLogContex
 
 	zapLog, err := zapConfig.Build()
 	if err != nil {
-		return nil, &err
+		return &err
 	}
 
 	GlobalZapLogContext = &ZapLogContext{ServiceName: serviceName, Environment: mode, ZapLog: *zapLog}
 
-	return GlobalZapLogContext, nil
+	return nil
 }
